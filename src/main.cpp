@@ -1,9 +1,9 @@
 /*----------------------------------------------------------------------------*/
 /*    Module:       main.cpp                                                  */
 /*    Author:       sagarpatel                                                */
-/*    Created:      Mon Mar 23 2020                                           */
-/*    Description:  PID Graph To Help For Tuning (Credits To James Pearman)   */
-/*----------------------------------------------------------------------------*/
+/*    Created:      Mon Mar 23 2020                                           *//*-------------------*/
+/*    Description:  PID Graph To Help For Tuning (Credits To James Pearman for graph-developing code)*/
+/*----------------------------------------------------------------------------*//*-------------------*/
 
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:

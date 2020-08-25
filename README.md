@@ -47,7 +47,7 @@ int TargetValueTask( void *arg ) {
     }
 }
 ```
-![GitHub Logo](https://github.com/sagarpatel211/211ZPIDTuner/blob/master/Example%20PID%20Graph%20Image.png)
+![Example](https://github.com/sagarpatel211/211ZPIDTuner/blob/master/Example%20PID%20Graph%20Image.png)
 
 
 ## Contributors

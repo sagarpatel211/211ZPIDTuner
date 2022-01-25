@@ -1,5 +1,5 @@
 # 211ZPIDTuner
-This is our PID tuner graph in VexCode that allows us to visualize the values of the motor to see if the PID is working correctly and is tuned perfectly. It can also be used for anything in VexCode that returns a value (eg. motor temperatures).
+This is our PID-controller tuner graph in VexCode that allows Team 211 to visualize the values of the motor to see if the PID controller is working correctly and is tuned perfectly. With slight changes, it can be used to graphically see the plotting of any desired value and any actual value you desire!
 
 
 ## Table of Contents
@@ -28,11 +28,11 @@ This is our PID tuner graph in VexCode that allows us to visualize the values of
 * V5 Brain screen displays current motor rotataional value and target motor value as lines on a graph
 * Customizable to as many graphed lines as you need
 * Our example (change the value of the *motordegree* and *Columndesired* to change the value being plotted on the graph):
-```
+```cpp
 int ActualValueTask( void *arg ) {
     if( arg == NULL ) return 0;
     graph *g = static_cast<graph *>(arg);
-    int motordegree = ((PIDMotor.rotation(rotationUnits::deg)/4));
+    int motordegree = ((PIDMotor.rotation(rotationUnits::deg)/4)); <- Change value (actual; green line)!
     while(1) {
       g->addPoint( 0, motordegree);
       this_thread::sleep_for(15);
@@ -42,7 +42,7 @@ int TargetValueTask( void *arg ) {
     if( arg == NULL ) return 0;
     graph *g = static_cast<graph *>(arg);
     while(1) {
-      g->addPoint( 1, ColumnDesired/4 );
+      g->addPoint( 1, ColumnDesired/4); <- Change ColumnDesired (desired; red line)!
       this_thread::sleep_for(15);
     }
 }

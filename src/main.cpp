@@ -17,6 +17,7 @@
 using namespace vex;
 vex::competition    Competition;
 /*-------------------------------Variables-----------------------------------*/
+// Sorry for the global variables...
 double ColumnTarget;
 double ColumnDesired;
 double ColumnKP = 0.0;
@@ -31,7 +32,7 @@ double ColumnError;
 /*---------------------------------------------------------------------------*/
 void pre_auton( void ) {
     vexcodeInit();
-    PIDMotor.setPosition(0, degrees);
+    PIDMotor.setPosition(0, degrees); // Just a reset of our tracked motor
 }
 /*---------------------------------------------------------------------------*/
 class graph {
@@ -142,7 +143,7 @@ class graph {
 int ActualValueTask( void *arg ) {
     if( arg == NULL ) return 0;
     graph *g = static_cast<graph *>(arg);
-    int motordegree = ((PIDMotor.rotation(rotationUnits::deg)/4));
+    int motordegree = ((PIDMotor.rotation(rotationUnits::deg) / 4));
     while(1) {
       g->addPoint( 0, motordegree);
       this_thread::sleep_for(15);
@@ -152,7 +153,7 @@ int TargetValueTask( void *arg ) {
     if( arg == NULL ) return 0;
     graph *g = static_cast<graph *>(arg);
     while(1) {
-      g->addPoint( 1, ColumnDesired/4 );
+      g->addPoint( 1, ColumnDesired / 4 );
       this_thread::sleep_for(15);
     }
 }
@@ -162,18 +163,16 @@ int TargetValueTask( void *arg ) {
 void usercontrol( void ) {
   while (1){
     if(Controller1.ButtonB.pressing()) { //Tray Forward Button
-        ColumnDesired = 800; //The desired value changes and the kP value is tuned to our requirement
-        ColumnKP = 0.0093; //Tune This To See A Difference In The Graph
-        ColumnKD = 0.00;        //Tune This To See A Difference In The Graph
-        ColumnKI = 0.0000000;   //Tune This To See A Difference In The Graph
-    }
-    else if(Controller1.ButtonA.pressing()) { //Tray Backward Button
-        ColumnDesired = 0; //The desired value changes and the kP value is tuned to our requirement
+        ColumnDesired = 800;    //The desired value changes and the kP value is tuned to our requirement
+        ColumnKP = 0.0093;      //Tune This
+        ColumnKD = 0.00;        //Tune This
+        ColumnKI = 0.0000000;   //Tune This
+    } else if(Controller1.ButtonA.pressing()) { //Tray Backward Button
+        ColumnDesired = 0;                   //The desired value changes and the kP value is tuned to our requirement
         ColumnKP = 0.0093;
         ColumnKD = 0;
         ColumnKI = 0;
-    }
-    else {
+    } else {
         ColumnDesired = PIDMotor.rotation(rotationUnits::deg); //The current position is desired so it doesn't move
         ColumnKP = 0;
         ColumnKD = 0;
@@ -184,11 +183,11 @@ void usercontrol( void ) {
     ColumnDerivative = ColumnError - ColumnPreviousError; //This find the difference between the current error and previous error 
     if (((PIDMotor.rotation(rotationUnits::deg) - ColumnDesired) < 5.0) && ((PIDMotor.rotation(rotationUnits::deg) - ColumnDesired) > -5.0)){
         ColumnIntegral = 0; //We don't need integral if the error is within +/- 5
-    }
-    else { //If It isn't within +/- 5
+    } else { //If It isn't within +/- 5
         ColumnIntegral += ColumnError; 
     }
-    PIDMotor.spin(reverse,(ColumnError * ColumnKP + ColumnDerivative * ColumnKD + ColumnIntegral * ColumnKI), voltageUnits::volt); //This calculates the voltage needed for the tray to move
+    //This calculates the voltage needed for the tray to move
+    PIDMotor.spin(reverse,(ColumnError * ColumnKP + ColumnDerivative * ColumnKD + ColumnIntegral * ColumnKI), voltageUnits::volt); 
     // 4 lines, axis at position 40, 240 
     graph g( 4, 20, 220 );
     // set line colors
@@ -202,7 +201,7 @@ void usercontrol( void ) {
     Brain.Screen.printAt(250, 272-20, "Target: %f",TargetValueTask);
     Brain.Screen.render(); //push data to the LCD all at once to prevent image flickering
     ColumnPreviousError = ColumnError; //Updates the variables
-    vex::task::sleep(15); //Slight delay so the Brain doesn't overprocess
+    vex::task::sleep(15); //Slight delay so the Cortex doesn't overprocess
   }
 }
 int main() {
